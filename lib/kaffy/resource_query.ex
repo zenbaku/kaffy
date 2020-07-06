@@ -29,7 +29,16 @@ defmodule Kaffy.ResourceQuery do
     current_page = Kaffy.Utils.repo().all(custom_query)
 
     do_cache = if search == "" and Enum.empty?(filtered_fields), do: true, else: false
-    all_count = cached_total_count(schema, do_cache, all)
+    all_count = if custom_query == all do
+      # use cache
+      cached_total_count(schema, do_cache, custom_query)
+    else
+      custom_query
+      |> subquery()
+      |> select(count("*"))
+      |> Kaffy.Utils.repo().one()
+    end
+
     {all_count, current_page}
   end
 
