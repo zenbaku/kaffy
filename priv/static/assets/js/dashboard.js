@@ -17,6 +17,26 @@ $(document).ready(function () {
       });
   });
 
+  function KaffySetupJsonEditors() {
+    const fields = document.querySelectorAll(".custom-control.custom-json");
+    fields.forEach(function (f) {
+      console.log(f);
+      const textarea = f.querySelector(".kaffy-json-editor-textarea");
+      const container = f.querySelector(".kaffy-json-editor-container");
+      const options = {
+        mode: 'code',
+        onChangeText: function (jsonString) {
+          textarea.innerHTML = jsonString;
+        }
+      };
+      const editor = new JSONEditor(container, options);
+      const initial = JSON.parse(textarea.innerHTML);
+      editor.set(initial);
+    });
+  };
+
+  KaffySetupJsonEditors();
+
   $(".kaffy-filter").change(function () {
     var selectFilter = $(this);
     var fieldName = selectFilter.data('field-name');

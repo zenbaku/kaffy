@@ -157,7 +157,13 @@ defmodule Kaffy.ResourceForm do
             true -> value
           end
 
-        textarea(form, field, [value: value, rows: 4, placeholder: "JSON Content"] ++ opts)
+        opts = Keyword.put(opts, :class, "kaffy-json-editor-textarea")
+        [
+          {:safe, ~s(<div class="custom-control custom-json">)},
+          textarea(form, field, [value: value, rows: 4] ++ opts),
+          {:safe, ~s(<div class="kaffy-json-editor-container"></div>)},
+          {:safe, "</div>"}
+        ]
 
       :file ->
         file_input(form, field, opts)
